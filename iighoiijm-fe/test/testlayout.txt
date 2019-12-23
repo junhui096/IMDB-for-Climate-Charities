@@ -1,0 +1,14 @@
+Sample Test Seires
+
+describe('SampleClassName', function() {
+  describe('#sampleClassFunction()', function() {
+    // it() method should be structured like "it should pass this test" i.e. read like a sentence
+    it('should pass this test', function() {
+      var class = new SampleClassName();
+      assert.equal(class.sampleClassFunction(), 'idealReturn');
+    });
+    ... as many it() methods as desired
+  });
+  ... as many inner describe() methods as desired (usually separated by class function)
+});
+... as many outer describe() methods as desired (usually separated by class)

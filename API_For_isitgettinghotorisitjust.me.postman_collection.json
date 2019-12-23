@@ -1,0 +1,1013 @@
+{
+	"info": {
+		"_postman_id": "15da52c1-0927-4ab2-8537-77cbe1583d05",
+		"name": "API For isitgettinghotorisitjust.me",
+		"description": "# Introduction\nWhat does your API do?\n\n# Overview\nThings that the developers should know about\n\n# Authentication\nWhat is the preferred way of using the API?\n\n# Error Codes\nWhat errors and status codes can a user expect?\n\n# Rate limit\nIs there a limit to the number of requests an user can send?",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Data about Countries",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2920e8db-f9e5-4038-8e1f-f3cfc481dc44",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"response should be okay to process\", function () { ",
+							"    pm.response.to.not.be.error; ",
+							"    pm.response.to.have.jsonBody(\"\"); ",
+							"    pm.response.to.not.have.jsonBody(\"error\"); ",
+							"});",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"EPI\", \"charities\", \"country_code\", \"country_name\", \"emission\", \"temperature\", \"flag_link\", \"issues\", \"latitude\", \"longtitude\", \"rainfall\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Check body\", function () {",
+							"    arr = [\"SWE\", \"DNK\", \"FRA\"];",
+							"    var a = pm.response.json().results",
+							"    for(i = 0; i < 3; i++) {",
+							"    var r = a[i];",
+							"    pm.expect(r.country_code).to.eql(arr[i]);",
+							"    }",
+							"});",
+							"pm.test(\"Check Length\", function () {",
+							"    var a = pm.response.json();",
+							"    console.log(a);",
+							"    var length = a.results.length;",
+							"    pm.expect(length).to.eql(3);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "api.isitgettinghotorisitjust.me/country?query=[1,2,3]&sort=EPI&order=asc&EPI=[80,100]&keywords=[\"pollution\"]",
+					"host": [
+						"api",
+						"isitgettinghotorisitjust",
+						"me"
+					],
+					"path": [
+						"country"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "[1,2,3]"
+						},
+						{
+							"key": "sort",
+							"value": "EPI"
+						},
+						{
+							"key": "order",
+							"value": "asc"
+						},
+						{
+							"key": "EPI",
+							"value": "[80,100]"
+						},
+						{
+							"key": "keywords",
+							"value": "[\"pollution\"]"
+						}
+					]
+				},
+				"description": "Given a query that is a list composed of ISO 3166 Alpha 3 Country Codes, country names or integers does the following for each element of the query list:\n1. If the element is a string then finds the corresponding country with code or name and adds it to the result.\n2. If the element is an integer then it applies the given filter, search parameters and sorts them and returns the instance that is on the position denoted by element.\n\nParameters:\n* query: list composed of ISO 3166 Alpha 3 Country Codes, country names or integers\n* sort: attribute name that the instances will be sorted with(available values: country_code, country_name, EPI)\n* order: sorting order can be either \"asc\" or \"desc\"\n* keywords: list of strings that should exist in the instance\n* other params are used for filtering and they correspond to a list of two values denoting the range we should filter on i.e EPI=[80,100] will filter out any\ncountries except with those who have an epi score between 80 and 100.(available params: country_name, EPI, longitude, latitude)\n\nThe return object will look like this:\n```\n{\n\t\"count\": <Number of instances that match the given keywords and filters>,\n\t\"results\": <List of instances that correspond to the given element of query>\n}\n```\nAnd each elements of results will look like this:\n```\n1.\n{\n\t\"error\": <error_message>\n}\n2.\n{\n\t\"country_code\": <ISO3166 Alpha 3 Country Code>,\n\t\"country_name\": <Country's Name>,\n\t\"charities\": <List of Charity names>,\n\t\"issues\": <List of Environmental Issue names>,\n\t\"temperature\": <List of Average Temperatures in the Format [start year, end year, Avg temperature in Celcius for these years]>,\n\t\"emission\": <List of Emission Amounts in the Format [year, metric ton CO2 emission per capita]>,\n\t\"rainfall\": <List of Average Rainfall in the Format [start year, end year, Avg temperature in Celcius for these years]>,\n\t\"EPI\": <Environmental Protection Index of the country>,\n\t\"longitude\": <Longitude of Country>,\n\t\"latitude\": <Latitude of Country>,\n\t\"flag_link\": <Link to the Country's flag>\n}\n```\nReturns 200 if successful, 400 if the query parameter is absent or ill formed."
+			},
+			"response": [
+				{
+					"name": "Invalid Request",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "api.isitgettinghotorisitjust.me/country?query=[\"USA\", \"NULL\"]",
+							"host": [
+								"api",
+								"isitgettinghotorisitjust",
+								"me"
+							],
+							"path": [
+								"country"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "[\"USA\", \"NULL\"]"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "",
+					"header": [],
+					"cookie": [],
+					"body": "{\n    \"count\": 210,\n    \"results\": [\n        {\n            \"EPI\": \"71.19\",\n            \"charities\": [\n            ],\n            \"country_code\": \"USA\",\n            \"country_name\": \"United States of America\",\n            \"emission\": [\n            ],\n            \"flag_link\": \"https://api.backendless.com/2F26DFBF-433C-51CC-FF56-830CEA93BF00/473FB5A9-D20E-8D3E-FF01-E93D9D780A00/files/CountryFlagsPng/usa.png\",\n            \"issues\": [\n            ],\n            \"latitude\": \"38\",\n            \"longtitude\": \"-97\",\n            \"rainfall\": [\n            ],\n            \"temperature\": [\n            ]\n        },\n        {\n            \"error\": \"Given key doesn't match any country.\"\n        }\n    ]\n}"
+				},
+				{
+					"name": "Request data both by country code, name and order",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "api.isitgettinghotorisitjust.me/country?query=[\"DEU\",\"Poland\",2]",
+							"host": [
+								"api",
+								"isitgettinghotorisitjust",
+								"me"
+							],
+							"path": [
+								"country"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "[\"DEU\",\"Poland\",2]"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "",
+					"header": [],
+					"cookie": [],
+					"body": "{\n    \"count\": 210,\n    \"results\": [\n        {\n            \"EPI\": \"78.37\",\n            \"charities\": [\n            ],\n            \"country_code\": \"DEU\",\n            \"country_name\": \"Germany\",\n            \"emission\": [\n            ],\n            \"flag_link\": \"https://api.backendless.com/2F26DFBF-433C-51CC-FF56-830CEA93BF00/473FB5A9-D20E-8D3E-FF01-E93D9D780A00/files/CountryFlagsPng/deu.png\",\n            \"issues\": [\n            ],\n            \"latitude\": \"51\",\n            \"longtitude\": \"9\",\n            \"rainfall\": [\n            ],\n            \"temperature\": [\n            ]\n        },\n        {\n            \"EPI\": \"64.11\",\n            \"charities\": [\n            ],\n            \"country_code\": \"POL\",\n            \"country_name\": \"Poland\",\n            \"emission\": [\n            ],\n            \"flag_link\": \"https://api.backendless.com/2F26DFBF-433C-51CC-FF56-830CEA93BF00/473FB5A9-D20E-8D3E-FF01-E93D9D780A00/files/CountryFlagsPng/pol.png\",\n            \"issues\": [\n            ],\n            \"latitude\": \"52\",\n            \"longtitude\": \"20\",\n            \"rainfall\": [\n            ],\n            \"temperature\": [\n            ]\n        },\n        {\n            \"EPI\": \"83.95\",\n            \"charities\": [\n                \"National Audubon Society\",\n                \"Greater Yellowstone Coalition\",\n                \"Cincinnati Nature Center\",\n                \"Land Trust Alliance\",\n                \"Worcester County Horticultural Society\",\n                \"Green America\",\n                \"The Marion Institute\",\n                \"The Wetlands Initiative\",\n                \"The Cousteau Society\",\n                \"Training Resources for the Environmental Community\",\n                \"Ecotrust\"\n            ],\n            \"country_code\": \"FRA\",\n            \"country_name\": \"France\",\n            \"emission\": [\n            ],\n            \"flag_link\": \"https://api.backendless.com/2F26DFBF-433C-51CC-FF56-830CEA93BF00/473FB5A9-D20E-8D3E-FF01-E93D9D780A00/files/CountryFlagsPng/fra.png\",\n            \"issues\": [\n                \"Water pollution\",\n                \"Agricultural runoff\",\n                \"Air pollution\",\n                \"Acid rain\",\n                \"Pollution\",\n                \"Waste\"\n            ],\n            \"latitude\": \"46\",\n            \"longtitude\": \"2\",\n            \"rainfall\": [\n            ],\n            \"temperature\": [\n            ]\n        }\n    ]\n}"
+				},
+				{
+					"name": "Filter by latitude and longitude",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "api.isitgettinghotorisitjust.me/country?query=[1,2,3]&latitude=[-20,20]&longitude=[-20,20]",
+							"host": [
+								"api",
+								"isitgettinghotorisitjust",
+								"me"
+							],
+							"path": [
+								"country"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "[1,2,3]"
+								},
+								{
+									"key": "latitude",
+									"value": "[-20,20]"
+								},
+								{
+									"key": "longitude",
+									"value": "[-20,20]"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.14.0 (Ubuntu)"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 10 Nov 2018 18:17:55 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "17216"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"count\": 18,\n    \"results\": [\n        {\n            \"EPI\": \"60.4\",\n            \"charities\": [\n            ],\n            \"country_code\": \"GNQ\",\n            \"country_name\": \"Equatorial Guinea\",\n            \"emission\": [\n            ],\n            \"flag_link\": \"https://api.backendless.com/2F26DFBF-433C-51CC-FF56-830CEA93BF00/473FB5A9-D20E-8D3E-FF01-E93D9D780A00/files/CountryFlagsPng/gnq.png\",\n            \"issues\": [\n            ],\n            \"latitude\": \"2\",\n            \"longtitude\": \"10\",\n            \"rainfall\": [\n            ],\n            \"temperature\": [\n            ]\n        },\n        {\n            \"EPI\": \"54.76\",\n            \"charities\": [],\n            \"country_code\": \"NGA\",\n            \"country_name\": \"Nigeria\",\n            \"emission\": [\n            ],\n            \"flag_link\": \"https://api.backendless.com/2F26DFBF-433C-51CC-FF56-830CEA93BF00/473FB5A9-D20E-8D3E-FF01-E93D9D780A00/files/CountryFlagsPng/nga.png\",\n            \"issues\": [\n            ],\n            \"latitude\": \"10\",\n            \"longtitude\": \"8\",\n            \"rainfall\": [\n            ],\n            \"temperature\": [\n            ]\n        },\n        {\n            \"EPI\": \"54.01\",\n            \"charities\": [\n            ],\n            \"country_code\": \"STP\",\n            \"country_name\": \"Sao Tome and Principe\",\n            \"emission\": [\n            ],\n            \"flag_link\": \"https://api.backendless.com/2F26DFBF-433C-51CC-FF56-830CEA93BF00/473FB5A9-D20E-8D3E-FF01-E93D9D780A00/files/CountryFlagsPng/stp.png\",\n            \"issues\": [\n            ],\n            \"latitude\": \"1\",\n            \"longtitude\": \"7\",\n            \"rainfall\": [\n            ],\n            \"temperature\": [\n            ]\n        }\n    ]\n}"
+				},
+				{
+					"name": "Get Country by Name",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "api.isitgettinghotorisitjust.me/country?query=[\"Switzerland\", \"France\", \"Denmark\"]",
+							"host": [
+								"api",
+								"isitgettinghotorisitjust",
+								"me"
+							],
+							"path": [
+								"country"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "[\"Switzerland\", \"France\", \"Denmark\"]"
+								}
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"count\": 210,\n    \"results\": [\n        {\n            \"EPI\": \"87.42\",\n            \"charities\": [],\n            \"country_code\": \"CHE\",\n            \"country_name\": \"Switzerland\",\n            \"emission\": [\n            ],\n            \"flag_link\": \"https://api.backendless.com/2F26DFBF-433C-51CC-FF56-830CEA93BF00/473FB5A9-D20E-8D3E-FF01-E93D9D780A00/files/CountryFlagsPng/che.png\",\n            \"issues\": [\n            ],\n            \"latitude\": \"47\",\n            \"longtitude\": \"8\",\n            \"rainfall\": [\n            ],\n            \"temperature\": [\n            ]\n        },\n        {\n            \"EPI\": \"83.95\",\n            \"charities\": [\n            ],\n            \"country_code\": \"FRA\",\n            \"country_name\": \"France\",\n            \"emission\": [\n            ],\n            \"flag_link\": \"https://api.backendless.com/2F26DFBF-433C-51CC-FF56-830CEA93BF00/473FB5A9-D20E-8D3E-FF01-E93D9D780A00/files/CountryFlagsPng/fra.png\",\n            \"issues\": [\n            ],\n            \"latitude\": \"46\",\n            \"longtitude\": \"2\",\n            \"rainfall\": [\n            ],\n            \"temperature\": [\n            ]\n        },\n        {\n            \"EPI\": \"81.6\",\n            \"charities\": [\n            ],\n            \"country_code\": \"DNK\",\n            \"country_name\": \"Denmark\",\n            \"emission\": [\n            ],\n            \"flag_link\": \"https://api.backendless.com/2F26DFBF-433C-51CC-FF56-830CEA93BF00/473FB5A9-D20E-8D3E-FF01-E93D9D780A00/files/CountryFlagsPng/dnk.png\",\n            \"issues\": [\n                \"Waste\",\n                \"Air pollution\",\n                \"Pesticides\",\n                \"Pollution\"\n            ],\n            \"latitude\": \"56\",\n            \"longtitude\": \"10\",\n            \"rainfall\": [\n            ],\n            \"temperature\": [\n            ]\n        }\n    ]\n}"
+				},
+				{
+					"name": "Request the first three countries that match given keywords, sorted by country_code",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "api.isitgettinghotorisitjust.me/country?query=[1,2,3]&keywords=[\"Pollution\", \"Forest\"]&sort=country_code&order=asc",
+							"host": [
+								"api",
+								"isitgettinghotorisitjust",
+								"me"
+							],
+							"path": [
+								"country"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "[1,2,3]"
+								},
+								{
+									"key": "keywords",
+									"value": "[\"Pollution\", \"Forest\"]"
+								},
+								{
+									"key": "sort",
+									"value": "country_code"
+								},
+								{
+									"key": "order",
+									"value": "asc"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "",
+					"header": [],
+					"cookie": [],
+					"body": "{\n    \"count\": 78,\n    \"results\": [\n        {\n            \"EPI\": \"37.74\",\n            \"charities\": [],\n            \"country_code\": \"AFG\",\n            \"country_name\": \"Afghanistan\",\n            \"emission\": [\n            ...\n            ],\n            \"flag_link\": \"https://api.backendless.com/2F26DFBF-433C-51CC-FF56-830CEA93BF00/473FB5A9-D20E-8D3E-FF01-E93D9D780A00/files/CountryFlagsPng/afg.png\",\n            \"issues\": [\n                \"Deforestation\",\n                \"Water pollution\"\n            ],\n            \"latitude\": \"33\",\n            \"longtitude\": \"65\",\n            \"rainfall\": [\n            ... \n            ],\n            \"temperature\": [\n            ...\n            ]\n        },\n        {\n            \"EPI\": \"37.44\",\n            \"charities\": [],\n            \"country_code\": \"AGO\",\n            \"country_name\": \"Angola\",\n            \"emission\": [\n                ...\n            ],\n            \"flag_link\": \"https://api.backendless.com/2F26DFBF-433C-51CC-FF56-830CEA93BF00/473FB5A9-D20E-8D3E-FF01-E93D9D780A00/files/CountryFlagsPng/ago.png\",\n            \"issues\": [\n                \"Pollution\",\n                \"Deforestation\"\n            ],\n            \"latitude\": \"-12.5\",\n            \"longtitude\": \"18.5\",\n            \"rainfall\": [\n            ...\n            ],\n            \"temperature\": [\n            ...\n            ]\n        },\n        {\n            \"EPI\": \"65.46\",\n            \"charities\": [\n                \"Environmental Advocates of New York\"\n            ],\n            \"country_code\": \"ALB\",\n            \"country_name\": \"Albania\",\n            \"emission\": [\n            ...\n            ],\n            \"flag_link\": \"https://api.backendless.com/2F26DFBF-433C-51CC-FF56-830CEA93BF00/473FB5A9-D20E-8D3E-FF01-E93D9D780A00/files/CountryFlagsPng/alb.png\",\n            \"issues\": [\n                \"Water pollution\",\n                \"Deforestation\"\n            ],\n            \"latitude\": \"41\",\n            \"longtitude\": \"20\",\n            \"rainfall\": [\n            ...\n            ],\n            \"temperature\": [\n            ...\n            ]\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Get Data about Issues",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0888ee83-2eba-4461-919b-761e0d7c95ff",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"response should be okay to process\", function () { ",
+							"    pm.response.to.not.be.error; ",
+							"    pm.response.to.have.jsonBody(\"\"); ",
+							"    pm.response.to.not.have.jsonBody(\"error\"); ",
+							"});",
+							"",
+							"pm.test(\"Check body\", function () {",
+							"    arr = [\"Pollution\", \"Deforestation\", \"Erosion\"];",
+							"    for(i = 0; i < 3; i++) {",
+							"    var a = pm.response.json().results[i];",
+							"    pm.expect(a.issue_name).to.eql(arr[i]);",
+							"    }",
+							"});",
+							"pm.test(\"Check body\", function () {",
+							"    var a = pm.response.json().results[0];",
+							"    pm.expect(a.issue_name).to.eql(\"Pollution\");",
+							"});",
+							"",
+							"pm.test(\"Check Length\", function () {",
+							"    var a = pm.response.json().results.length;",
+							"    pm.expect(a).to.eql(3);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "api.isitgettinghotorisitjust.me/issue?query=[1,2,3]",
+					"host": [
+						"api",
+						"isitgettinghotorisitjust",
+						"me"
+					],
+					"path": [
+						"issue"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "[1,2,3]"
+						}
+					]
+				},
+				"description": "Given a query that is a list composed of Issue names or integers does the following for each element of the query list:\n1. If the element is a string then finds the corresponding issue with name and adds it to the result.\n2. If the element is an integer then it applies the given filter, search parameters and sorts them and returns the instance that is on the position denoted by element.\n\nParameters:\n* query: list composed of issue names or integers\n* sort: attribute name that the instances will be sorted with(available values: issue_name, country(sorts by country count), charity(sorts by charity count))\n* order: sorting order can be either \"asc\" or \"desc\"\n* keywords: list of strings that should exist in the instance\n* other params are used for filtering and they correspond to a list of two values denoting the range we should filter on i.e issue_name=[\"Ecocide\",\"Environmental crime\"] will filter out any\nissues with names that aren't between Ecocide and Environmental Crime.\n\nThe return object will look like this:\n```\n{\n\t\"count\": <Number of instances that match the given keywords and filters>,\n\t\"results\": <List of instances that correspond to the given element of query>\n}\n```\nAnd each elements of results will look like this:\n```\n1.\n{\n\t\"error\": <error_message>\n}\n2.\n{\n\t\"issue_name\": <Name of the issue>,\n    \"url\": <Link to the Wikipedia article on the issue>,\n    \"summary\": <Summary about the issue taken from Wikipedia>,\n    \"images\": <Link to an image about the issue>,\n    \"countries\": <List of ISO3166 Alpha 3 Country Codes of countries which are affected by the issue>,\n    \"charities\": <List of charities that deal with the issue>\n}\n```\nReturns 200 if successful, 400 if the query parameter is absent or ill formed."
+			},
+			"response": [
+				{
+					"name": "Request the first three issues",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "api.isitgettinghotorisitjust.me/issue?query=[1,2,3]",
+							"host": [
+								"api",
+								"isitgettinghotorisitjust",
+								"me"
+							],
+							"path": [
+								"issue"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "[1,2,3]"
+								}
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"count\": 293,\n    \"results\": [\n        {\n            \"charities\": [],\n            \"countries\": [],\n            \"images\": \"https://upload.wikimedia.org/wikipedia/commons/7/73/Rocks_on_Shamokin_Creek.JPG\",\n            \"issue_name\": \"Acid mine drainage\",\n            \"summary\": \"\",\n            \"url\": \"https://en.wikipedia.org/wiki/Acid_mine_drainage\"\n        },\n        {\n            \"charities\": [],\n            \"countries\": [\n            ],\n            \"images\": \"https://upload.wikimedia.org/wikipedia/commons/b/b1/Origins_of_acid_rain.svg\",\n            \"issue_name\": \"Acid rain\",\n            \"summary\": \"\",\n            \"url\": \"https://en.wikipedia.org/wiki/Acid_rain\"\n        },\n        {\n            \"charities\": [],\n            \"countries\": [],\n            \"images\": \"https://upload.wikimedia.org/wikipedia/commons/b/b4/2%2C4%2C5-T.svg\",\n            \"issue_name\": \"Agent Orange\",\n            \"summary\": \"\",\n            \"url\": \"https://en.wikipedia.org/wiki/Agent_Orange\"\n        }\n    ]\n}"
+				},
+				{
+					"name": "Invalid Request",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "api.isitgettinghotorisitjust.me/issue?query=[\"Erosion\", \"NULL\"]",
+							"host": [
+								"api",
+								"isitgettinghotorisitjust",
+								"me"
+							],
+							"path": [
+								"issue"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "[\"Erosion\", \"NULL\"]"
+								}
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"count\": 293,\n    \"results\": [\n        {\n            \"charities\": [\n            ],\n            \"countries\": [\n            ],\n            \"images\": \"https://upload.wikimedia.org/wikipedia/commons/e/e1/Eroding_rill_in_field_in_eastern_Germany.jpg\",\n            \"issue_name\": \"Erosion\",\n            \"summary\": \".\",\n            \"url\": \"https://en.wikipedia.org/wiki/Erosion\"\n        },\n        {\n            \"error\": \"Given key doesn't match any issue.\"\n        }\n    ]\n}"
+				},
+				{
+					"name": "Filter by issue name",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "api.isitgettinghotorisitjust.me/issue?query=[1,2,3]&issue_name=[\"D\",\"F\"]",
+							"host": [
+								"api",
+								"isitgettinghotorisitjust",
+								"me"
+							],
+							"path": [
+								"issue"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "[1,2,3]"
+								},
+								{
+									"key": "issue_name",
+									"value": "[\"D\",\"F\"]"
+								}
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"count\": 69,\n    \"results\": [\n        {\n            \"charities\": [],\n            \"countries\": [],\n            \"images\": \"https://upload.wikimedia.org/wikipedia/commons/f/ff/Rhino_poaching.jpg\",\n            \"issue_name\": \"Defaunation\",\n            \"summary\": \"\",\n            \"url\": \"https://en.wikipedia.org/wiki/Defaunation\"\n        },\n        {\n            \"charities\": [],\n            \"countries\": [\n            ],\n            \"images\": \"https://upload.wikimedia.org/wikipedia/commons/7/70/Sustainable_development.svg\",\n            \"issue_name\": \"Deforestation\",\n            \"summary\": \"\",\n            \"url\": \"https://en.wikipedia.org/wiki/Deforestation\"\n        },\n        {\n            \"charities\": [],\n            \"countries\": [],\n            \"images\": \"https://upload.wikimedia.org/wikipedia/commons/b/bf/Mark_149_Mod_2_20mm_ammunition.jpg\",\n            \"issue_name\": \"Depleted Uranium\",\n            \"summary\": \"\",\n            \"url\": \"https://en.wikipedia.org/wiki/Depleted_uranium\"\n        }\n    ]\n}"
+				},
+				{
+					"name": "Request data both by ordering and name",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "api.isitgettinghotorisitjust.me/issue?query=[\"Erosion\",2]",
+							"host": [
+								"api",
+								"isitgettinghotorisitjust",
+								"me"
+							],
+							"path": [
+								"issue"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "[\"Erosion\",2]"
+								}
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"count\": 293,\n    \"results\": [\n        {\n            \"charities\": [\n            ],\n            \"countries\": [\n            ],\n            \"images\": \"https://upload.wikimedia.org/wikipedia/commons/e/e1/Eroding_rill_in_field_in_eastern_Germany.jpg\",\n            \"issue_name\": \"Erosion\",\n            \"summary\": \"\",\n            \"url\": \"https://en.wikipedia.org/wiki/Erosion\"\n        },\n        {\n            \"charities\": [],\n            \"countries\": [\n            ],\n            \"images\": \"https://upload.wikimedia.org/wikipedia/commons/b/b1/Origins_of_acid_rain.svg\",\n            \"issue_name\": \"Acid rain\",\n            \"summary\": \"\",\n            \"url\": \"https://en.wikipedia.org/wiki/Acid_rain\"\n        }\n    ]\n}"
+				},
+				{
+					"name": "Request the first three issues that match given keywords, sorted by country",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "api.isitgettinghotorisitjust.me/issue?query=[1,2,3]&sort=country&order=desc&keywords=[\"Climate\", \"Heat\"]",
+							"host": [
+								"api",
+								"isitgettinghotorisitjust",
+								"me"
+							],
+							"path": [
+								"issue"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "[1,2,3]"
+								},
+								{
+									"key": "sort",
+									"value": "country"
+								},
+								{
+									"key": "order",
+									"value": "desc"
+								},
+								{
+									"key": "keywords",
+									"value": "[\"Climate\", \"Heat\"]"
+								}
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"count\": 10,\n    \"results\": [\n        {\n            \"charities\": [\n            ],\n            \"countries\": [\n            ],\n            \"images\": \"https://upload.wikimedia.org/wikipedia/commons/2/29/Wheat_selection_k10183-1.jpg\",\n            \"issue_name\": \"Biodiversity\",\n            \"summary\": \"\",\n            \"url\": \"https://en.wikipedia.org/wiki/Biodiversity\"\n        },\n        {\n            \"charities\": [\n            ],\n            \"countries\": [\n            ],\n            \"images\": \"https://upload.wikimedia.org/wikipedia/commons/5/57/Carson_Fall_Mt_Kinabalu.jpg\",\n            \"issue_name\": \"Fossil fuels\",\n            \"summary\": \"\",\n            \"url\": \"https://en.wikipedia.org/wiki/Fossil_fuel\"\n        },\n        {\n            \"charities\": [\n            ],\n            \"countries\": [\n            ],\n            \"images\": \"https://upload.wikimedia.org/wikipedia/commons/e/e6/Projected_change_in_annual_mean_surface_air_temperature_from_the_late_20th_century_to_the_middle_21st_century%2C_based_on_SRES_emissions_scenario_A1B.png\",\n            \"issue_name\": \"Global warming\",\n            \"summary\": \"\",\n            \"url\": \"https://en.wikipedia.org/wiki/Global_warming\"\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Get Data about Charities",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "82585453-e073-4d78-a6cd-f4576e69231b",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"response should be okay to process\", function () { ",
+							"    pm.response.to.not.be.error; ",
+							"    pm.response.to.have.jsonBody(\"\"); ",
+							"    pm.response.to.not.have.jsonBody(\"error\"); ",
+							"});",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Address\", \"Image\", \"charity_name\", \"country\", \"donation_link\", \"issues\", \"mission\", \"tagLine\", \"website\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Check body\", function () {",
+							"    arr = [\"1000 Friends of Florida\", \"1000 Friends of Oregon\", \"350.org\"];",
+							"    for(i = 0; i < 3; i++) {",
+							"    var a = pm.response.json().results[i];",
+							"    pm.expect(a.charity_name).to.eql(arr[i]);",
+							"    }",
+							"});",
+							"",
+							"pm.test(\"Check Length\", function () {",
+							"    var a = pm.response.json().results.length;",
+							"    pm.expect(a).to.eql(3);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "b1526176-aede-4b7c-9a67-2c1a3bda3cbf",
+						"exec": [
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "api.isitgettinghotorisitjust.me/charity?query=[1,2,3]",
+					"host": [
+						"api",
+						"isitgettinghotorisitjust",
+						"me"
+					],
+					"path": [
+						"charity"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "[1,2,3]"
+						}
+					]
+				},
+				"description": "Given a query that is a list composed of charity names or integers does the following for each element of the query list:\n1. If the element is a string then finds the corresponding issue with name and adds it to the result.\n2. If the element is an integer then it applies the given filter, search parameters and sorts them and returns the instance that is on the position denoted by element.\n\nParameters:\n* query: list composed of charity names or integers\n* sort: attribute name that the instances will be sorted with(available values: charity_name, country(sorts by country count), issue(sorts by issue count))\n* order: sorting order can be either \"asc\" or \"desc\"\n* keywords: list of strings that should exist in the instance\n* other params are used for filtering and they correspond to a list of two values denoting the range we should filter on i.e charity_name=[\"Boston Harbor Now\",\"Connecticut Fund for the Environment\"] will filter out any\ncharities with names that aren't between Boston Harbor Now and Connecticut Fund for the Environment.\n\nThe return object will look like this:\n```\n{\n\t\"count\": <Number of instances that match the given keywords and filters>,\n\t\"results\": <List of instances that correspond to the given element of query>\n}\n```\nAnd each elements of results will look like this:\n```\n1.\n{\n\t\"error\": <error_message>\n}\n2.\n{\n\t  \"charity_name\": <Name of the charity>,\n\t  \"tagLine\": <A statement that concisely describes the mission of the charity involved>,\n\t  \"website\": <Website of the charity>,\n\t  \"mission\": <Description of the main activities of the charity>,\n\t  \"Address\": {\n\t    \"country\": <The country the charity is located in>,\n\t    \"stateOrProvince\": <State of the charity>,\n\t    \"city\": <City where the charity is located>,\n\t    \"postalCode\": <Postal code of the charity>,\n\t    \"streetAddress1\": <First line of address of charity>,\n\t    \"streetAddress2\": <Second line of address of charity>\n\t  },\n\t  \"country\": <List of ISO3166 alpha 3 country codes of the countries that the charity has operations in>,\n\t  \"issues\": <List of issues the charity tries to solve>,\n\t  \"donation_link\": <A link to donate to the charity>,\n\t  \"Image\": <Link to the logo of the charity>\n}\n```\nReturns 200 if successful, 400 if the query parameter is absent or ill formed."
+			},
+			"response": [
+				{
+					"name": "Request the first three charities",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "api.isitgettinghotorisitjust.me/charity?query=[1,2,3]",
+							"host": [
+								"api",
+								"isitgettinghotorisitjust",
+								"me"
+							],
+							"path": [
+								"charity"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "[1,2,3]"
+								}
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"count\": 443,\n    \"results\": [\n        {\n            \"Address\": {\n                \"city\": \"Tallahassee\",\n                \"country\": null,\n                \"postalCode\": \"32301\",\n                \"stateOrProvince\": \"FL\",\n                \"streetAddress1\": \"308 North Monroe Street\",\n                \"streetAddress2\": null\n            },\n            \"Image\": \"https://logo.clearbit.com/http://www.1000fof.org/\",\n            \"charity_name\": \"1000 Friends of Florida\",\n            \"country\": [\n            ],\n            \"donation_link\": \"https://www.charitynavigator.org/?bay=search.summary&orgid=10092&utm_source=DataAPI&utm_content=9af5afa3\",\n            \"issues\": [\n                \"Recreation\"\n            ],\n            \"mission\": \"\",\n            \"website\": \"http://www.1000fof.org/\"\n        },\n        {\n            \"Address\": {\n                \"city\": \"Portland\",\n                \"country\": null,\n                \"postalCode\": \"97204\",\n                \"stateOrProvince\": \"OR\",\n                \"streetAddress1\": \"133 SW 2nd Ave\",\n                \"streetAddress2\": \"Suite 201\"\n            },\n            \"Image\": \"https://logo.clearbit.com/http://www.friends.org\",\n            \"charity_name\": \"1000 Friends of Oregon\",\n            \"country\": [\n            ],\n            \"donation_link\": \"https://www.charitynavigator.org/?bay=search.summary&orgid=8770&utm_source=DataAPI&utm_content=9af5afa3\",\n            \"issues\": [],\n            \"mission\": \"Working with Oregonians to enhance our quality of life by building livable urban and rural communities, protecting family farms and forests, and conserving natural areas.\",\n            \"tagLine\": \"Great communities. Working lands. Iconic Places.\",\n            \"website\": \"http://www.friends.org\"\n        },\n        {\n            \"Address\": {\n                \"city\": \"Brooklyn\",\n                \"country\": null,\n                \"postalCode\": \"11201\",\n                \"stateOrProvince\": \"NY\",\n                \"streetAddress1\": \"20 Jay Street\",\n                \"streetAddress2\": \"Suite 732\"\n            },\n            \"Image\": \"https://logo.clearbit.com/http://350.org\",\n            \"charity_name\": \"350.org\",\n            \"country\": [\n            ],\n            \"donation_link\": \"https://www.charitynavigator.org/?bay=search.summary&orgid=16289&utm_source=DataAPI&utm_content=9af5afa3\",\n            \"issues\": [],\n            \"mission\": \"\",\n            \"tagLine\": \"We're Building A Global Climate Movement\",\n            \"website\": \"http://350.org\"\n        }\n    ]\n}"
+				},
+				{
+					"name": "Filter by charity name",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "api.isitgettinghotorisitjust.me/charity?query=[1,2,3]&charity_name=[\"G\", \"L\"]",
+							"host": [
+								"api",
+								"isitgettinghotorisitjust",
+								"me"
+							],
+							"path": [
+								"charity"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "[1,2,3]"
+								},
+								{
+									"key": "charity_name",
+									"value": "[\"G\", \"L\"]"
+								}
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"count\": 49,\n    \"results\": [\n        {\n            \"Address\": {\n                \"city\": \"Fairfax\",\n                \"country\": null,\n                \"postalCode\": \"22030\",\n                \"stateOrProvince\": \"VA\",\n                \"streetAddress1\": \"11150 Fairfax Boulevard\",\n                \"streetAddress2\": \"Suite 408\"\n            },\n            \"Image\": \"https://logo.clearbit.com/http://www.galapagos.org/\",\n            \"charity_name\": \"Galapagos Conservancy\",\n            \"country\": [\n            ],\n            \"donation_link\": \"https://www.charitynavigator.org/?bay=search.summary&orgid=8754&utm_source=DataAPI&utm_content=9af5afa3\",\n            \"issues\": [],\n            \"mission\": \"\",\n            \"tagLine\": \"Advocating for the lasting protection of the Galapagos Islands\",\n            \"website\": \"http://www.galapagos.org/\"\n        },\n        {\n            \"Address\": {\n                \"city\": \"Houston\",\n                \"country\": null,\n                \"postalCode\": \"77058\",\n                \"stateOrProvince\": \"TX\",\n                \"streetAddress1\": \"1100 Hercules Avenue\",\n                \"streetAddress2\": \"Suite 200\"\n            },\n            \"Image\": \"https://logo.clearbit.com/http://www.galvbay.org/\",\n            \"charity_name\": \"Galveston Bay Foundation\",\n            \"country\": [\n                \"KOR\",\n                \"ZAF\",\n                \"SGS\",\n                \"SSD\"\n            ],\n            \"donation_link\": \"https://www.charitynavigator.org/?bay=search.summary&orgid=7333&utm_source=DataAPI&utm_content=9af5afa3\",\n            \"issues\": [\n                \"Natural resources\"\n            ],\n            \"mission\": \"\",\n            \"website\": \"http://www.galvbay.org/\"\n        },\n        {\n            \"Address\": {\n                \"city\": \"Chicago\",\n                \"country\": null,\n                \"postalCode\": \"60624\",\n                \"stateOrProvince\": \"IL\",\n                \"streetAddress1\": \"300 North Central Park Avenue\",\n                \"streetAddress2\": null\n            },\n            \"Image\": \"https://logo.clearbit.com/https://garfieldconservatory.org/\",\n            \"charity_name\": \"Garfield Park Conservatory Alliance\",\n            \"country\": [\n            ],\n            \"donation_link\": \"https://www.charitynavigator.org/?bay=search.summary&orgid=9050&utm_source=DataAPI&utm_content=9af5afa3\",\n            \"issues\": [],\n            \"mission\": \"\",\n            \"tagLine\": \"Growing community through the unique combination of people, plants, and place\",\n            \"website\": \"https://garfieldconservatory.org/\"\n        }\n    ]\n}"
+				},
+				{
+					"name": "Request data both by ordering and name",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "api.isitgettinghotorisitjust.me/charity?query=[1,\"Hermann Park Conservancy\" ]",
+							"host": [
+								"api",
+								"isitgettinghotorisitjust",
+								"me"
+							],
+							"path": [
+								"charity"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "[1,\"Hermann Park Conservancy\" ]"
+								}
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"count\": 443,\n    \"results\": [\n        {\n            \"Address\": {\n                \"city\": \"Tallahassee\",\n                \"country\": null,\n                \"postalCode\": \"32301\",\n                \"stateOrProvince\": \"FL\",\n                \"streetAddress1\": \"308 North Monroe Street\",\n                \"streetAddress2\": null\n            },\n            \"Image\": \"https://logo.clearbit.com/http://www.1000fof.org/\",\n            \"charity_name\": \"1000 Friends of Florida\",\n            \"country\": [\n            ],\n            \"donation_link\": \"https://www.charitynavigator.org/?bay=search.summary&orgid=10092&utm_source=DataAPI&utm_content=9af5afa3\",\n            \"issues\": [\n                \"Recreation\"\n            ],\n            \"mission\": \"\",\n            \"tagLine\": \"Building Better Communities and Saving Special Places\",\n            \"website\": \"http://www.1000fof.org/\"\n        },\n        {\n            \"Address\": {\n                \"city\": \"Houston\",\n                \"country\": null,\n                \"postalCode\": \"77004\",\n                \"stateOrProvince\": \"TX\",\n                \"streetAddress1\": \"1700 Hermann Drive\",\n                \"streetAddress2\": null\n            },\n            \"Image\": \"https://logo.clearbit.com/http://www.hermannpark.org/\",\n            \"charity_name\": \"Hermann Park Conservancy\",\n            \"country\": [\n            ],\n            \"donation_link\": \"https://www.charitynavigator.org/?bay=search.summary&orgid=9071&utm_source=DataAPI&utm_content=9af5afa3\",\n            \"issues\": [\n                \"Recreation\"\n            ],\n            \"mission\": \"\",\n            \"tagLine\": \"Dedicated to the stewardship and improvement of Hermann Park\",\n            \"website\": \"http://www.hermannpark.org/\"\n        }\n    ]\n}"
+				},
+				{
+					"name": "Request the first three charities that match given keywords, sorted by country count",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "api.isitgettinghotorisitjust.me/charity?query=[1,2,3]&sort=country&order=desc&keywords=[\"profit\", \"volunteer\"]",
+							"host": [
+								"api",
+								"isitgettinghotorisitjust",
+								"me"
+							],
+							"path": [
+								"charity"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "[1,2,3]"
+								},
+								{
+									"key": "sort",
+									"value": "country"
+								},
+								{
+									"key": "order",
+									"value": "desc"
+								},
+								{
+									"key": "keywords",
+									"value": "[\"profit\", \"volunteer\"]"
+								}
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"count\": 14,\n    \"results\": [\n        {\n            \"Address\": {\n                \"city\": \"Silver Spring\",\n                \"country\": null,\n                \"postalCode\": \"20910\",\n                \"stateOrProvince\": \"MD\",\n                \"streetAddress1\": \"8605 Second Avenue\",\n                \"streetAddress2\": null\n            },\n            \"Image\": \"https://logo.clearbit.com/http://www.americanhiking.org/\",\n            \"charity_name\": \"American Hiking Society\",\n            \"country\": [\n            ],\n            \"donation_link\": \"https://www.charitynavigator.org/?bay=search.summary&orgid=10990&utm_source=DataAPI&utm_content=9af5afa3\",\n            \"issues\": [],\n            \"mission\": \"\",\n            \"tagLine\": \"Because you hike, we're with you every step of the way\",\n            \"website\": \"http://www.americanhiking.org/\"\n        },\n        {\n            \"Address\": {\n                \"city\": \"St. Paul\",\n                \"country\": null,\n                \"postalCode\": \"55107\",\n                \"stateOrProvince\": \"MN\",\n                \"streetAddress1\": \"35 West Water Street\",\n                \"streetAddress2\": \"Suite 201\"\n            },\n            \"Image\": \"https://logo.clearbit.com/http://www.greatrivergreening.org/\",\n            \"charity_name\": \"Great River Greening\",\n            \"country\": [\n            ],\n            \"donation_link\": \"https://www.charitynavigator.org/?bay=search.summary&orgid=8271&utm_source=DataAPI&utm_content=9af5afa3\",\n            \"issues\": [\n                \"Natural resources\"\n            ],\n            \"mission\": \"\",\n            \"website\": \"http://www.greatrivergreening.org/\"\n        },\n        {\n            \"Address\": {\n                \"city\": \"Austin\",\n                \"country\": null,\n                \"postalCode\": \"78702\",\n                \"stateOrProvince\": \"TX\",\n                \"streetAddress1\": \"507 Calles Street\",\n                \"streetAddress2\": \"Suite 116\"\n            },\n            \"Image\": \"https://logo.clearbit.com/https://www.austinparks.org/\",\n            \"charity_name\": \"Austin Parks Foundation\",\n            \"country\": [\n            ],\n            \"donation_link\": \"https://www.charitynavigator.org/?bay=search.summary&orgid=17279&utm_source=DataAPI&utm_content=9af5afa3\",\n            \"issues\": [],\n            \"mission\": \"\",\n            \"tagLine\": \"People plus parks\",\n            \"website\": \"https://www.austinparks.org/\"\n        }\n    ]\n}"
+				},
+				{
+					"name": "Invalid Request",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "api.isitgettinghotorisitjust.me/charity?query=[1, \"NULL\"]",
+							"host": [
+								"api",
+								"isitgettinghotorisitjust",
+								"me"
+							],
+							"path": [
+								"charity"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "[1, \"NULL\"]"
+								}
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"count\": 443,\n    \"results\": [\n        {\n            \"Address\": {\n                \"city\": \"Tallahassee\",\n                \"country\": null,\n                \"postalCode\": \"32301\",\n                \"stateOrProvince\": \"FL\",\n                \"streetAddress1\": \"308 North Monroe Street\",\n                \"streetAddress2\": null\n            },\n            \"Image\": \"https://logo.clearbit.com/http://www.1000fof.org/\",\n            \"charity_name\": \"1000 Friends of Florida\",\n            \"country\": [\n            ],\n            \"donation_link\": \"https://www.charitynavigator.org/?bay=search.summary&orgid=10092&utm_source=DataAPI&utm_content=9af5afa3\",\n            \"issues\": [\n            ],\n            \"mission\": \"The state's leading not-for-profit smart growth advocacy organization, 1000 Friends of Florida is building better communities and saving special places in one of the fastest growing states in the nation. We promote vibrant, sustainable, walkable, livable communities which provide residents with affordable housing choices and transportation alternatives. We work to protect natural lands that cleanse and store fresh water needed for residents, agriculture and the environment, provide refuge for wildlife, and support abundant recreational opportunities for residents and visitors alike. Above all, we strive to give citizens a meaningful role in shaping the futures of their communities and state.<br><br>Founded in 1986, 1000 Friends of Florida is a 501(c)(3) nonprofit membership organization.<br>\",\n            \"tagLine\": \"Building Better Communities and Saving Special Places\",\n            \"website\": \"http://www.1000fof.org/\"\n        },\n        {\n            \"error\": \"Given key doesn't match any charity.\"\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Get Data about Countries by ISO Code",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "28637854-7f41-4f3e-832d-651f8f59c2d5",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"response should be okay to process\", function () { ",
+							"    pm.response.to.not.be.error; ",
+							"    pm.response.to.have.jsonBody(\"\"); ",
+							"    pm.response.to.not.have.jsonBody(\"error\"); ",
+							"});",
+							"",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"EPI\", \"charities\", \"country_code\", \"country_name\", \"emission\", \"temperature\", \"flag_link\", \"issues\", \"latitude\", \"longtitude\", \"rainfall\");",
+							"});",
+							"",
+							"pm.test(\"Check body\", function () {",
+							"    var a = pm.response.json().results[0];",
+							"    pm.expect(a.country_code).to.eql(\"CHE\");",
+							"    var b = pm.response.json().results[1];",
+							"    pm.expect(b.country_code).to.eql(\"USA\");",
+							"});",
+							"",
+							"pm.test(\"Check Length\", function () {",
+							"    var a = pm.response.json().results.length;",
+							"    pm.expect(a).to.eql(2);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "api.isitgettinghotorisitjust.me/country?query=[\"CHE\", \"USA\"]",
+					"host": [
+						"api",
+						"isitgettinghotorisitjust",
+						"me"
+					],
+					"path": [
+						"country"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "[\"CHE\", \"USA\"]"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Data About Issues by Name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "fff2d074-95a8-4cec-8753-24b118166d90",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"response should be okay to process\", function () { ",
+							"    pm.response.to.not.be.error; ",
+							"    pm.response.to.have.jsonBody(\"\"); ",
+							"    pm.response.to.not.have.jsonBody(\"error\"); ",
+							"});",
+							"",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"charities\", \"countries\", \"images\", \"issue_name\", \"summary\", \"url\");",
+							"});",
+							"",
+							"pm.test(\"Check body\", function () {",
+							"    var a = pm.response.json().results[0];",
+							"    pm.expect(a.issue_name).to.eql(\"Deforestation\");",
+							"    var b = pm.response.json().results[1];",
+							"    pm.expect(b.issue_name).to.eql(\"Urbanization\");",
+							"});",
+							"",
+							"pm.test(\"Check Length\", function () {",
+							"    var a = pm.response.json().results.length;",
+							"    pm.expect(a).to.eql(2);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "api.isitgettinghotorisitjust.me/issue?query=[\"Deforestation\", \"Urbanization\"]",
+					"host": [
+						"api",
+						"isitgettinghotorisitjust",
+						"me"
+					],
+					"path": [
+						"issue"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "[\"Deforestation\", \"Urbanization\"]"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Data About Charities by Name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a0160385-5437-44d1-890d-a2f52e7670c5",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"response should be okay to process\", function () { ",
+							"    pm.response.to.not.be.error; ",
+							"    pm.response.to.have.jsonBody(\"\"); ",
+							"    pm.response.to.not.have.jsonBody(\"error\"); ",
+							"});",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Address\", \"Image\", \"charity_name\", \"country\", \"donation_link\", \"issues\", \"mission\", \"tagLine\", \"website\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Check body\", function () {",
+							"    arr = [\"Greenbelt Alliance\", \"Audubon Naturalist Society\"];",
+							"    for(i = 0; i < 2; i++) {",
+							"    var a = pm.response.json().results[i];",
+							"    pm.expect(a.charity_name).to.eql(arr[i]);",
+							"    }",
+							"});",
+							"",
+							"pm.test(\"Check Length\", function () {",
+							"    var a = pm.response.json().results.length;",
+							"    pm.expect(a).to.eql(2);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "api.isitgettinghotorisitjust.me/charity?query=[\"Greenbelt Alliance\", \"Audubon Naturalist Society\"]",
+					"host": [
+						"api",
+						"isitgettinghotorisitjust",
+						"me"
+					],
+					"path": [
+						"charity"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "[\"Greenbelt Alliance\", \"Audubon Naturalist Society\"]"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

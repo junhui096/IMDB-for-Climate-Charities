@@ -1,0 +1,15 @@
+{
+	"CHN": {
+		"country_name": "China"
+	},
+	"USA": {
+		"country_name": "United States of America"
+	},
+	"DEU": {
+		"country_name": "Germany"
+	},
+	"JPN": {
+		"country_name": "Japan"
+	}
+
+}

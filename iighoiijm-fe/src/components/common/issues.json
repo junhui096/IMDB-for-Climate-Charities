@@ -1,0 +1,25 @@
+{
+	"Desertification":{
+		"issue_name":"Desertification",
+		"countries":[
+			"CHN",
+			"DEU"
+		]
+	},
+	"Air pollution":{
+		"issue_name":"Air Pollution",
+		"countries":[
+			"CHN",
+			"USA",
+			"DEU",
+			"JPN"
+		]
+	},
+	"Erosion":{
+		"issue_name":"Erosion",
+		"countries":[
+			"USA",
+			"DEU"
+		]
+	}
+}
